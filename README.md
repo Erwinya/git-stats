@@ -4,17 +4,21 @@ C++17 CLI that summarizes a Git repository: commit count, authors, and recent su
 
 Uses the `git` CLI on PATH (no packfile parsing). Walks upward to find `.git`.
 
-## Build
+## Status
 
-```bat
-build.bat
+Git root discovery is in place. Commit/author collection, recent subjects, CLI, and build scripts will land in follow-up commits.
+
+## Library (so far)
+
+```cpp
+#include "git_stats.hpp"
+auto root = gitstats::find_git_root(".");
 ```
 
-## Usage
+## Requirements
 
-```bash
-./git-stats --path ../some-repo --recent 5
-```
+- C++17 compiler
+- `git` available on PATH (for later summary commands)
 
 ## License
 
