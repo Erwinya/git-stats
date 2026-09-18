@@ -35,13 +35,20 @@ std::string run_git(const std::string &repo, const std::string &args) {
     return out;
 }
 
+std::string trim_trailing_newline(std::string s) {
+    while (!s.empty() && (s.back() == '\n' || s.back() == '\r')) {
+        s.pop_back();
+    }
+    return s;
+}
+
 }  // namespace
 
-RepoStats collect(const std::string &repo_root) {
+RepoStats collect(const std::string &repo_root, std::size_t recent_limit) {
     RepoStats stats;
     stats.root = repo_root;
 
-    std::string count_text = run_git(repo_root, "rev-list --count HEAD");
+    std::string count_text = trim_trailing_newline(run_git(repo_root, "rev-list --count HEAD"));
     stats.commit_count = static_cast<std::size_t>(std::stoull(count_text));
 
     std::string shortlog = run_git(repo_root, "shortlog -sn --all");
@@ -58,6 +65,19 @@ RepoStats collect(const std::string &repo_root) {
         while (j < line.size() && (line[j] == ' ' || line[j] == '\t')) ++j;
         std::string author = line.substr(j);
         stats.commits_by_author[author] += n;
+    }
+
+    if (recent_limit > 0) {
+        std::string log_out = run_git(
+            repo_root,
+            "log -n " + std::to_string(recent_limit) + " --pretty=format:%s");
+        std::istringstream log_in(log_out);
+        while (std::getline(log_in, line)) {
+            line = trim_trailing_newline(std::move(line));
+            if (!line.empty()) {
+                stats.recent_subjects.push_back(std::move(line));
+            }
+        }
     }
     return stats;
 }

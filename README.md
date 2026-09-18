@@ -6,7 +6,7 @@ Uses the `git` CLI on PATH (no packfile parsing). Walks upward to find `.git`.
 
 ## Status
 
-Git root discovery plus commit/author collection are in place. Recent subjects, CLI entrypoint, and build scripts will land in follow-up commits.
+Git root discovery, commit/author collection, and recent subjects are in place. CLI entrypoint and build scripts will land in follow-up commits.
 
 ## Library (so far)
 
@@ -14,8 +14,8 @@ Git root discovery plus commit/author collection are in place. Recent subjects, 
 #include "git_stats.hpp"
 
 auto root = gitstats::find_git_root(".");
-auto stats = gitstats::collect(root);
-// stats.commit_count, stats.commits_by_author
+auto stats = gitstats::collect(root, /*recent_limit=*/5);
+// stats.commit_count, stats.commits_by_author, stats.recent_subjects
 ```
 
 ## Requirements
