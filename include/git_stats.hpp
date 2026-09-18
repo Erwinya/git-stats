@@ -19,4 +19,7 @@ std::string find_git_root(const std::string &start_dir);
 /// Collect commit count, author totals, and recent subjects via the `git` CLI.
 RepoStats collect(const std::string &repo_root, std::size_t recent_limit = 10);
 
+/// Print a human-readable summary to stdout.
+void print_report(const RepoStats &stats);
+
 }  // namespace gitstats

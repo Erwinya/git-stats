@@ -3,6 +3,7 @@
 #include <array>
 #include <cctype>
 #include <cstdio>
+#include <iostream>
 #include <sstream>
 #include <stdexcept>
 
@@ -80,6 +81,27 @@ RepoStats collect(const std::string &repo_root, std::size_t recent_limit) {
         }
     }
     return stats;
+}
+
+void print_report(const RepoStats &stats) {
+    std::cout << "root          : " << stats.root << '\n';
+    std::cout << "commits       : " << stats.commit_count << '\n';
+    std::cout << "authors:\n";
+    if (stats.commits_by_author.empty()) {
+        std::cout << "  (none)\n";
+    } else {
+        for (const auto &entry : stats.commits_by_author) {
+            std::cout << "  " << entry.second << "  " << entry.first << '\n';
+        }
+    }
+    std::cout << "recent:\n";
+    if (stats.recent_subjects.empty()) {
+        std::cout << "  (none)\n";
+    } else {
+        for (const auto &subject : stats.recent_subjects) {
+            std::cout << "  - " << subject << '\n';
+        }
+    }
 }
 
 }  // namespace gitstats

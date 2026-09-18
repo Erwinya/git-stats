@@ -6,16 +6,23 @@ Uses the `git` CLI on PATH (no packfile parsing). Walks upward to find `.git`.
 
 ## Status
 
-Git root discovery, commit/author collection, and recent subjects are in place. CLI entrypoint and build scripts will land in follow-up commits.
+Library APIs plus a CLI entrypoint (`src/main.cpp`) are in place. Makefile / `build.bat` will land in a follow-up commit.
 
-## Library (so far)
+## Build (manual)
+
+```powershell
+g++ -std=c++17 -I include -o git-stats.exe src\git_root.cpp src\git_stats.cpp src\main.cpp
+.\git-stats.exe --path . --recent 5
+```
+
+## Library
 
 ```cpp
 #include "git_stats.hpp"
 
 auto root = gitstats::find_git_root(".");
 auto stats = gitstats::collect(root, /*recent_limit=*/5);
-// stats.commit_count, stats.commits_by_author, stats.recent_subjects
+gitstats::print_report(stats);
 ```
 
 ## Requirements
