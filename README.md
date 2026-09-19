@@ -6,13 +6,20 @@ Uses the `git` CLI on PATH (no packfile parsing). Walks upward to find `.git`.
 
 ## Status
 
-Library APIs plus a CLI entrypoint (`src/main.cpp`) are in place. Makefile / `build.bat` will land in a follow-up commit.
+Library, CLI, and build scripts (`Makefile`, `build.bat`) are in place.
 
-## Build (manual)
+## Build
 
-```powershell
-g++ -std=c++17 -I include -o git-stats.exe src\git_root.cpp src\git_stats.cpp src\main.cpp
-.\git-stats.exe --path . --recent 5
+```bash
+make
+./git-stats --path . --recent 5
+```
+
+Windows (MinGW / LLVM):
+
+```bat
+build.bat
+build\git-stats.exe --path . --recent 5
 ```
 
 ## Library
