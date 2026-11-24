@@ -1,7 +1,8 @@
 #pragma once
 
-#include <map>
+#include <cstddef>
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace gitstats {
@@ -9,7 +10,8 @@ namespace gitstats {
 struct RepoStats {
     std::string root;
     std::size_t commit_count = 0;
-    std::map<std::string, std::size_t> commits_by_author;
+    /// Authors ranked by commit count (desc), then name (asc).
+    std::vector<std::pair<std::string, std::size_t>> commits_by_author;
     std::vector<std::string> recent_subjects;
 };
 
@@ -17,6 +19,7 @@ struct RepoStats {
 std::string find_git_root(const std::string &start_dir);
 
 /// Collect commit count, author totals, and recent subjects via the `git` CLI.
+/// All queries use the same revision scope (`HEAD`).
 RepoStats collect(const std::string &repo_root, std::size_t recent_limit = 10);
 
 /// Print a human-readable summary to stdout.
